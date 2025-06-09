@@ -6,7 +6,7 @@
 A lightweight tool I made to manage and edit my dotfiles. 
 Born as part of my Arch installation, called **YoRHarch**, mainly inspired by the aesthetic of **NieR:Automata**.
 
-- Simple GUI (Based on Dear ImGUI);
+- Simple GUI (Based on Dear ImGui);
 - Edit any dotfile with configurable paths;
 - Change theme easily by swapping groups of dotfiles; 
 - Designed to be minimal and fast.
