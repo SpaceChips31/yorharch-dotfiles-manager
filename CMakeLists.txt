@@ -18,6 +18,8 @@ find_package(OpenGL REQUIRED)
 # === GLFW ===
 add_subdirectory(${CMAKE_SOURCE_DIR}/external/glfw)
 
+set(GLFW_DIR ${CMAKE_SOURCE_DIR}/external/GLFW)
+
 # === ImGui ===
 
 set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/external/imgui)
@@ -34,7 +36,7 @@ add_library(imgui STATIC
 target_include_directories(imgui PUBLIC
     ${IMGUI_DIR}
     ${IMGUI_DIR}/backends
-    ${CMAKE_SOURCE_DIR}/external/glfw/include
+    ${GLFW_DIR}/include
 )
 
 target_link_libraries(imgui PUBLIC glfw)

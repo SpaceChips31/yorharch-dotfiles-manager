@@ -1,46 +1,61 @@
+#include <iostream>
+
 #include <GLFW/glfw3.h>
+
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-int main() {
-    if (!glfwInit())
-        return -1;
+void error_callback(int error, const char* description){
+    fprintf(stderr, "Error: %s\n", description);
+}
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "YoRHarch GUI", nullptr, nullptr);
-    if (!window) {
-        glfwTerminate();
-        return -1;
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+}
+
+int main () {
+    int n = 0;
+    
+    glfwSetErrorCallback(error_callback);
+
+    if (!glfwInit())
+    {
+        std::cout << "An error occured during GLFW initialization.\n";
+        exit(EXIT_FAILURE);
     }
 
+    GLFWwindow* window = glfwCreateWindow(800, 600, "YoRHarch - Hello", NULL, NULL);
+    if (!window){
+        std::cout << "An error occured during window creation.\n";
+        exit(EXIT_FAILURE);
+    }
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
-    ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
+    ImGui_ImplOpenGL3_Init();
 
-    while (!glfwWindowShouldClose(window)) {
+    glfwSetKeyCallback(window, key_callback);
+    
+    while(!glfwWindowShouldClose(window)){
         glfwPollEvents();
-
+        
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::Begin("YoRHarch");
-        ImGui::Text("Hello from YoRHarch GUI");
-        ImGui::End();
-
-        ImGui::Render();
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
+        ImGui::Text("Welcome to YoRHarch!");
+        
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
@@ -49,6 +64,7 @@ int main() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+
     glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
